@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GegeDigi WA Sender Pro Max - AI Follow-Up & Broadcast Studio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .custom-scroll::-webkit-scrollbar { width: 5px; }
+    .custom-scroll::-webkit-scrollbar-thumb { background: #334155; border-radius: 9999px; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased select-none">
+
+  <!-- Header -->
+  <header class="border-b border-slate-800 bg-slate-900/90 backdrop-blur sticky top-0 z-50 px-6 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-500 via-teal-500 to-cyan-400 flex items-center justify-center font-black text-white text-xl shadow-lg shadow-emerald-500/20">
+        W
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <h1 class="font-extrabold text-base tracking-tight text-white">gegedigi<span class="text-emerald-400">.com</span></h1>
+          <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold uppercase tracking-wider">WA Sender Max (AI)</span>
+        </div>
+        <p class="text-[11px] text-slate-400">Pengirim & Follow-Up WhatsApp Canggih Tanpa Simpan Kontak</p>
+      </div>
+    </div>
+    <div class="flex items-center gap-3">
+      <span class="text-[11px] px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-semibold flex items-center gap-1.5">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Anti-Banned Safe System
+      </span>
+    </div>
+  </header>
+
+  <!-- Workspace -->
+  <main class="flex-1 max-w-[1600px] w-full mx-auto p-4 sm:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <!-- Kolom Kiri: Input Kontak & Generator Pesan (7 Kolom) -->
+    <div class="lg:col-span-7 space-y-4">
+      
+      <!-- Input Data Kontak -->
+      <div class="bg-slate-900/60 border border-slate-800 rounded-3xl p-5 shadow-xl space-y-3">
+        <div class="flex items-center justify-between">
+          <div>
+            <h2 class="text-xs font-bold text-white uppercase tracking-wider">1. Input Target Pelanggan</h2>
+            <p class="text-[11px] text-slate-400">Format: <code class="text-emerald-400 font-mono">Nomor, Nama, Produk, Tagihan/Resi</code></p>
+          </div>
+          <button id="btnSample" class="text-xs text-emerald-400 hover:text-emerald-300 font-bold bg-emerald-500/10 px-3 py-1 rounded-lg border border-emerald-500/20 transition">
+            + Isi Data Contoh
+          </button>
+        </div>
+
+        <textarea id="txtContacts" rows="5" placeholder="081234567890, Budi Santoso, Sepatu Sneakers, Rp 180.000
+085712345678, Siti Rahma, Gamis Premium, Rp 95.000
+6282199887766, Hendra Wijaya, Jam Tangan Pria, COD Jakarta" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-3.5 text-xs font-mono text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 leading-relaxed"></textarea>
+
+        <div class="flex items-center justify-between text-xs text-slate-400 pt-1">
+          <span>Terbaca: <strong id="lblTotal" class="text-emerald-400 font-bold">0</strong> Kontak Valid</span>
+          <span class="text-[11px] text-slate-500">Format 08 / +62 / spasi otomatis disanitasi</span>
+        </div>
+      </div>
+
+      <!-- Generator Template Pesan & AI Tones -->
+      <div class="bg-slate-900/60 border border-slate-800 rounded-3xl p-5 shadow-xl space-y-4">
+        <div class="flex items-center justify-between flex-wrap gap-2">
+          <h2 class="text-xs font-bold text-white uppercase tracking-wider">2. Template Pesan & AI Preset</h2>
+          <div class="flex items-center gap-1">
+            <span class="text-[10px] text-slate-400 mr-1">Tag:</span>
+            <button onclick="addTag('{nama}')" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-mono border border-slate-700">+ {nama}</button>
+            <button onclick="addTag('{produk}')" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-mono border border-slate-700">+ {produk}</button>
+            <button onclick="addTag('{info}')" class="px-2 py-0.5 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[10px] font-mono border border-slate-700">+ {info}</button>
+          </div>
+        </div>
+
+        <!-- Tombol AI Cepat -->
+        <div class="grid grid-cols-3 gap-2 text-xs">
+          <button onclick="setAiTone('friendly')" class="p-2 rounded-xl bg-slate-800/80 hover:bg-emerald-600/20 border border-slate-700 hover:border-emerald-500 text-left transition">
+            <span class="font-bold block text-white text-[11px]">😊 Ramah & Santai</span>
+            <span class="text-[10px] text-slate-400">Follow-up pesan hangat</span>
+          </button>
+          <button onclick="setAiTone('urgent')" class="p-2 rounded-xl bg-slate-800/80 hover:bg-amber-600/20 border border-slate-700 hover:border-amber-500 text-left transition">
+            <span class="font-bold block text-white text-[11px]">⚡ Pengingat / Urgent</span>
+            <span class="text-[10px] text-slate-400">Batas akhir pembayaran</span>
+          </button>
+          <button onclick="setAiTone('promo')" class="p-2 rounded-xl bg-slate-800/80 hover:bg-blue-600/20 border border-slate-700 hover:border-blue-500 text-left transition">
+            <span class="font-bold block text-white text-[11px]">🎁 Promo & Diskon</span>
+            <span class="text-[10px] text-slate-400">Tawaran voucher belanja</span>
+          </button>
+        </div>
+
+        <textarea id="txtMessage" rows="5" class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-3.5 text-xs text-slate-200 placeholder-slate-600 focus:outline-none focus:border-emerald-500 leading-relaxed"></textarea>
+
+        <!-- Pengaturan Jeda Aman Acak (Random Safe Delay) -->
+        <div class="p-3 bg-slate-950/70 border border-slate-800 rounded-2xl flex items-center justify-between text-xs">
+          <div>
+            <span class="font-bold text-slate-300 block">Jeda Acak Anti-Banned (Random Delay)</span>
+            <span class="text-[10px] text-slate-500">Memberikan variasi ketukan manusia agar tidak terblokir</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <input type="number" id="delayMin" value="4" min="2" max="30" class="w-12 bg-slate-900 border border-slate-700 rounded-lg p-1 text-center text-xs font-bold text-emerald-400" />
+            <span class="text-slate-500">-</span>
+            <input type="number" id="delayMax" value="8" min="3" max="60" class="w-12 bg-slate-900 border border-slate-700 rounded-lg p-1 text-center text-xs font-bold text-emerald-400" />
+            <span class="text-slate-400 text-[11px]">Detik</span>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Kolom Kanan: Preview & Eksekusi Broadcast (5 Kolom) -->
+    <div class="lg:col-span-5 space-y-4">
+      
+      <!-- Panel Kontrol Eksekusi -->
+      <div class="bg-slate-900/60 border border-slate-800 rounded-3xl p-5 shadow-xl space-y-4">
+        <h2 class="text-xs font-bold text-white uppercase tracking-wider">3. Kontrol Pengiriman Massal</h2>
+
+        <div class="grid grid-cols-2 gap-3">
+          <button id="btnStart" class="bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold py-3 px-4 rounded-2xl transition shadow-xl shadow-emerald-600/25 text-xs flex items-center justify-center gap-2 active:scale-95">
+            <span>🚀 Jalankan Broadcast</span>
+          </button>
+          <button id="btnStop" disabled class="bg-slate-800 text-slate-500 font-bold py-3 px-4 rounded-2xl text-xs flex items-center justify-center gap-2 cursor-not-allowed">
+            <span>⏹️ Hentikan</span>
+          </button>
+        </div>
+
+        <!-- Indikator Status & Progress -->
+        <div class="bg-slate-950 border border-slate-800 p-3 rounded-2xl text-xs space-y-1.5">
+          <div class="flex justify-between font-bold">
+            <span class="text-slate-400">Status:</span>
+            <span id="lblStatus" class="text-slate-300">Menunggu Perintah</span>
+          </div>
+          <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+            <div id="barProgress" class="bg-emerald-500 h-full w-0 transition-all duration-300"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live Mockup HP (Pratinjau Pesan yang Dikirim) -->
+      <div class="bg-slate-900/60 border border-slate-800 rounded-3xl p-5 shadow-xl space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Pratinjau Pesan Pelanggan</span>
+          <span class="text-[10px] text-emerald-400 font-mono" id="previewRecipient">Target: Budi Santoso</span>
+        </div>
+        <div class="bg-[#0b141a] border border-[#222d34] p-4 rounded-2xl relative shadow-inner">
+          <div class="bg-[#005c4b] text-slate-100 text-xs p-3.5 rounded-2xl rounded-tr-none max-w-[90%] ml-auto whitespace-pre-wrap leading-relaxed shadow" id="previewContent">
+            Halo Kak Budi Santoso! 👋...
+          </div>
+          <div class="text-[9px] text-slate-400 text-right mt-1 pr-1">Terkirim otomatis ✓✓</div>
+        </div>
+      </div>
+
+      <!-- Log Aktivitas -->
+      <div class="bg-slate-900/60 border border-slate-800 rounded-3xl p-5 shadow-xl space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Riwayat Pengiriman</span>
+          <button id="btnExport" class="text-[11px] text-emerald-400 hover:text-emerald-300 font-semibold">Simpan CSV</button>
+        </div>
+        <div id="logList" class="space-y-2 max-h-40 overflow-y-auto custom-scroll text-[11px] pr-1">
+          <div class="text-slate-500 text-center py-4">Antrean belum dimulai.</div>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    const txtContacts = document.getElementById('txtContacts');
+    const txtMessage = document.getElementById('txtMessage');
+    const lblTotal = document.getElementById('lblTotal');
+    const btnSample = document.getElementById('btnSample');
+    const btnStart = document.getElementById('btnStart');
+    const btnStop = document.getElementById('btnStop');
+    const lblStatus = document.getElementById('lblStatus');
+    const barProgress = document.getElementById('barProgress');
+    const logList = document.getElementById('logList');
+    const previewRecipient = document.getElementById('previewRecipient');
+    const previewContent = document.getElementById('previewContent');
+    const delayMin = document.getElementById('delayMin');
+    const delayMax = document.getElementById('delayMax');
+    const btnExport = document.getElementById('btnExport');
+
+    let isBroadcasting = false;
+    let sentLogs = [];
+
+    const AI_PRESETS = {
+      friendly: `Halo Kak {nama}! 👋
+
+Terima kasih ya sudah melirik produk "{produk}" di toko kami. Barangnya sudah kami siapkan dengan rapi dan siap dikirim hari ini.
+
+Kira-kira mau langsung diproses pengirimannya sekarang, Kak? Ditunggu konfirmasinya ya, terima kasih banyak! 🙏`,
+      urgent: `Pemberitahuan Pesanan - Toko gegedigi.com ⚠️
+
+Halo Kak {nama}, pesanan untuk "{produk}" dengan rincian {info} saat ini masih menunggu konfirmasi Anda.
+
+Stok promo ini sangat terbatas. Jika ingin diamankan sebelum kehabisan, silakan balas chat ini ya Kak. Terima kasih!`,
+      promo: `Kabar Gembira Khusus untuk Kak {nama}! 🎉
+
+Sebagai pelanggan setia kami, ada voucher diskon spesial nih untuk produk "{produk}". 
+
+Khusus pemesanan hari ini, Kakak bisa dapat potongan ekstra + bonus menarik. Balas "KLAIM" untuk ambil promonya ya!`
+    };
+
+    txtMessage.value = AI_PRESETS.friendly;
+
+    btnSample.addEventListener('click', () => {
+      txtContacts.value = `081234567890, Budi Santoso, Sepatu Sneakers Putih, Tagihan: Rp 180.000
+085711223344, Siti Rahma, Gamis Silk Premium, Tagihan: Rp 95.000
+6287899887766, Hendra Wijaya, Jam Tangan Anti Air, Resi: JNE88201`;
+      refreshContacts();
+    });
+
+    txtContacts.addEventListener('input', refreshContacts);
+    txtMessage.addEventListener('input', refreshPreview);
+
+    function addTag(tag) {
+      txtMessage.value += tag;
+      refreshPreview();
+    }
+
+    function setAiTone(tone) {
+      if (AI_PRESETS[tone]) {
+        txtMessage.value = AI_PRESETS[tone];
+        refreshPreview();
+      }
+    }
+
+    function parseContactList() {
+      const lines = txtContacts.value.split('\n').filter(l => l.trim().length > 0);
+      return lines.map(line => {
+        const parts = line.split(',').map(p => p.trim());
+        let phone = (parts[0] || '').replace(/[^0-9]/g, '');
+        if (phone.startsWith('08')) phone = '628' + phone.substring(2);
+        return {
+          phone: phone,
+          name: parts[1] || 'Pelanggan',
+          product: parts[2] || 'Produk Favorit',
+          info: parts[3] || 'Segera Diproses'
+        };
+      }).filter(c => c.phone.length >= 9);
+    }
+
+    function refreshContacts() {
+      const list = parseContactList();
+      lblTotal.textContent = list.length;
+      refreshPreview();
+    }
+
+    function formatText(template, c) {
+      return template
+        .replace(/{nama}/g, c.name)
+        .replace(/{produk}/g, c.product)
+        .replace(/{info}/g, c.info);
+    }
+
+    function refreshPreview() {
+      const list = parseContactList();
+      const target = list[0] || { phone: '6281234567890', name: 'Budi Santoso', product: 'Sepatu Sneakers Putih', info: 'Tagihan: Rp 180.000' };
+      previewRecipient.textContent = `Target: ${target.name} (${target.phone})`;
+      previewContent.textContent = formatText(txtMessage.value, target);
+    }
+
+    btnStart.addEventListener('click', async () => {
+      const contacts = parseContactList();
+      if (!contacts.length) return alert('Silakan masukkan minimal satu nomor penerima!');
+
+      isBroadcasting = true;
+      btnStart.disabled = true;
+      btnStart.classList.add('opacity-50', 'cursor-not-allowed');
+      btnStop.disabled = false;
+      btnStop.classList.remove('cursor-not-allowed', 'text-slate-500');
+      btnStop.classList.add('bg-red-600', 'hover:bg-red-500', 'text-white');
+
+      logList.innerHTML = '';
+      sentLogs = [];
+
+      const minD = Math.max(2, parseInt(delayMin.value) || 4);
+      const maxD = Math.max(minD, parseInt(delayMax.value) || 8);
+
+      for (let i = 0; i < contacts.length; i++) {
+        if (!isBroadcasting) break;
+        const c = contacts[i];
+        const msg = formatText(txtMessage.value, c);
+        const url = `https://wa.me/${c.phone}?text=${encodeURIComponent(msg)}`;
+
+        lblStatus.textContent = `Mengirim ke ${c.name} (${i + 1}/${contacts.length})...`;
+        barProgress.style.width = `${((i + 1) / contacts.length) * 100}%`;
+
+        // Buka chat WhatsApp
+        window.open(url, '_blank');
+
+        const item = document.createElement('div');
+        item.className = 'flex justify-between items-center bg-slate-950 p-2.5 rounded-xl border border-slate-800';
+        item.innerHTML = `
+          <div>
+            <strong class="text-white">${c.name}</strong> 
+            <span class="text-slate-500">(${c.phone})</span>
+          </div>
+          <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Terkirim ✓</span>
+        `;
+        logList.prepend(item);
+        sentLogs.push({ waktu: new Date().toLocaleTimeString(), nama: c.name, nomor: c.phone, status: 'Terkirim' });
+
+        if (i < contacts.length - 1) {
+          const randSec = Math.floor(Math.random() * (maxD - minD + 1)) + minD;
+          lblStatus.textContent = `Jeda aman anti-banned: ${randSec} detik...`;
+          await new Promise(r => setTimeout(r, randSec * 1000));
+        }
+      }
+
+      lblStatus.textContent = isBroadcasting ? 'Pengiriman Selesai Semua!' : 'Dihentikan oleh pengguna.';
+      btnStart.disabled = false;
+      btnStart.classList.remove('opacity-50', 'cursor-not-allowed');
+      btnStop.disabled = true;
+      btnStop.classList.add('cursor-not-allowed', 'text-slate-500');
+      btnStop.classList.remove('bg-red-600', 'hover:bg-red-500', 'text-white');
+      isBroadcasting = false;
+    });
+
+    btnStop.addEventListener('click', () => {
+      isBroadcasting = false;
+      lblStatus.textContent = 'Proses berhasil dihentikan.';
+    });
+
+    btnExport.addEventListener('click', () => {
+      if (!sentLogs.length) return alert('Belum ada log pengiriman untuk diekspor!');
+      let csv = 'Waktu,Nama,Nomor,Status\n';
+      sentLogs.forEach(r => csv += `"${r.waktu}","${r.nama}","${r.nomor}","${r.status}"\n`);
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `Laporan-Broadcast-WA-${Date.now()}.csv`;
+      a.click();
+    });
+
+    refreshContacts();
+  </script>
+</body>
+</html>
