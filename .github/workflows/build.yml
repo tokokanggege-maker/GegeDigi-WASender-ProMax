@@ -1,0 +1,85 @@
+name: Build Single WA Sender Installer
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-installer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install System NSIS
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y nsis
+
+      - name: Setup Electron Configuration
+        run: |
+          cat << 'EOF' > package.json
+          {
+            "name": "gegedigi-wa-sender",
+            "version": "1.0.0",
+            "main": "main.js"
+          }
+          EOF
+          cat << 'EOF' > main.js
+          const { app, BrowserWindow } = require('electron');
+          function createWindow () {
+            const win = new BrowserWindow({
+              width: 1280,
+              height: 850,
+              autoHideMenuBar: true
+            });
+            win.loadFile('index.html');
+          }
+          app.whenReady().then(createWindow);
+          app.on('window-all-closed', () => {
+            if (process.platform !== 'darwin') app.quit();
+          });
+          EOF
+
+      - name: Build Electron App
+        run: |
+          npm install electron@28.2.0 @electron/packager@18.3.1 --save-dev
+          npx @electron/packager . "GegeDigi-WA-Sender" --platform=win32 --arch=x64 --out=dist --overwrite
+
+      - name: Generate One-Click Installer Script
+        run: |
+          cat << 'EOF' > installer.nsi
+          !include "MUI2.nsh"
+
+          Name "GegeDigi WA Sender Pro"
+          OutFile "GegeDigi-WA-Sender-Setup.exe"
+          InstallDir "$LOCALAPPDATA\GegeDigiWASender"
+          RequestExecutionLevel user
+
+          !define MUI_ABORTWARNING
+          !insertmacro MUI_PAGE_INSTFILES
+          !insertmacro MUI_LANGUAGE "English"
+
+          Section "Install"
+            SetOutPath "$INSTDIR"
+            File /r "dist/GegeDigi-WA-Sender-win32-x64/*.*"
+            CreateShortcut "$DESKTOP\GegeDigi WA Sender Pro.lnk" "$INSTDIR\GegeDigi-WA-Sender.exe"
+            CreateDirectory "$SMPROGRAMS\GegeDigi WA Sender Pro"
+            CreateShortcut "$SMPROGRAMS\GegeDigi WA Sender Pro\GegeDigi WA Sender Pro.lnk" "$INSTDIR\GegeDigi-WA-Sender.exe"
+            Exec '"$INSTDIR\GegeDigi-WA-Sender.exe"'
+          SectionEnd
+          EOF
+
+      - name: Compile Single EXE Installer
+        run: |
+          makensis installer.nsi
+
+      - name: Upload Single Setup Installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: GegeDigi-WA-Sender-Setup
+          path: GegeDigi-WA-Sender-Setup.exe
